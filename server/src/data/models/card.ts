@@ -15,9 +15,10 @@ class Card {
     this.description = description;
     this.createdAt = new Date();
     this.id = randomUUID();
-    prototypeRegistry.registerPrototype(this.id, this);
+    prototypeRegistry.registerPrototype(this.id, this); // PATTERN: prototype
   }
 
+  // PATTERN: prototype
   public clone(): Prototype {
     return new Card(this.name, this.description);
   }

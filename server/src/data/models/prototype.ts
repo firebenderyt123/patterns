@@ -1,3 +1,4 @@
+// PATTERN: prototype
 interface Prototype {
   clone(): Prototype;
 }
