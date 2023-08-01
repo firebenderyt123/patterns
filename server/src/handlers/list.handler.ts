@@ -3,7 +3,7 @@ import type { Socket } from "socket.io";
 import { ListEvent } from "../common/enums";
 import { List } from "../data/models/list";
 import { SocketHandler } from "./socket.handler";
-import { publisher } from "../patterns/observer";
+import { logger } from "../patterns/observer";
 import { LogTypes } from "../common/enums/log.enums";
 
 export class ListHandler extends SocketHandler {
@@ -29,11 +29,11 @@ export class ListHandler extends SocketHandler {
       this.updateLists();
 
       // PATTERN: observer
-      const logMessage = `Lists reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}`;
-      publisher.changeState({ type: LogTypes.INFO, message: logMessage });
+      logger.writeInfo(
+        `Lists reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}`
+      );
     } catch (error) {
-      const errorMessage = `Error reordering lists: ${error.message}`;
-      publisher.changeState({ type: LogTypes.ERROR, message: errorMessage });
+      logger.writeError(`Error reordering lists: ${error.message}`);
     }
   }
 
@@ -45,11 +45,9 @@ export class ListHandler extends SocketHandler {
       this.updateLists();
 
       // PATTERN: observer
-      const logMessage = `List created: name=${name}`;
-      publisher.changeState({ type: LogTypes.INFO, message: logMessage });
+      logger.writeInfo(`List created: name=${name}`);
     } catch (error) {
-      const errorMessage = `Error creating list: ${error.message}`;
-      publisher.changeState({ type: LogTypes.ERROR, message: errorMessage });
+      logger.writeError(`Error creating list: ${error.message}`);
     }
   }
 }

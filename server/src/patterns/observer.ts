@@ -43,8 +43,21 @@ class LogPublisher implements Publisher {
     });
   }
 
-  public changeState(state: State): void {
+  private writeLog(state: State): void {
     this.state = state;
+    this.notifySubscribers();
+  }
+
+  public writeInfo(message: string): void {
+    this.writeLog({ type: LogTypes.INFO, message });
+  }
+
+  public writeWarning(message: string): void {
+    this.writeLog({ type: LogTypes.WARNING, message });
+  }
+
+  public writeError(message: string): void {
+    this.writeLog({ type: LogTypes.ERROR, message });
   }
 }
 
@@ -72,13 +85,13 @@ class LogFileSubscriber extends LogConsoleSubscriber {
   }
 }
 
-const publisher = new LogPublisher();
+const logger = new LogPublisher();
 
 const logConsoleWriter = new LogConsoleSubscriber(); // errors
 const logFileWriter = new LogFileSubscriber(ALL_LOGS_PATH); // all
 
-publisher.subscribe(logConsoleWriter);
-publisher.subscribe(logFileWriter);
+logger.subscribe(logConsoleWriter);
+logger.subscribe(logFileWriter);
 
 export type { Publisher, Subscriber };
-export { publisher };
+export { logger };
