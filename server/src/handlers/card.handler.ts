@@ -24,6 +24,7 @@ export class CardHandler extends SocketHandler {
       this.db.setData(updatedLists);
       this.updateLists();
 
+      // PATTERN: observer
       const logMessage = `Card created in list ${listId}: ${cardName}`;
       publisher.changeState({ type: LogTypes.INFO, message: logMessage });
     } catch (error) {
@@ -55,6 +56,7 @@ export class CardHandler extends SocketHandler {
       this.db.setData(reordered);
       this.updateLists();
 
+      // PATTERN: observer
       const logMessage = `Cards reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}, sourceListId=${sourceListId}, destinationListId=${destinationListId}`;
       publisher.changeState({ type: LogTypes.INFO, message: logMessage });
     } catch (error) {

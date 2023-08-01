@@ -28,6 +28,7 @@ export class ListHandler extends SocketHandler {
       this.db.setData(reorderedLists);
       this.updateLists();
 
+      // PATTERN: observer
       const logMessage = `Lists reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}`;
       publisher.changeState({ type: LogTypes.INFO, message: logMessage });
     } catch (error) {
@@ -43,6 +44,7 @@ export class ListHandler extends SocketHandler {
       this.db.setData(lists.concat(newList));
       this.updateLists();
 
+      // PATTERN: observer
       const logMessage = `List created: name=${name}`;
       publisher.changeState({ type: LogTypes.INFO, message: logMessage });
     } catch (error) {
