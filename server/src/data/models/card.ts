@@ -1,4 +1,5 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from "crypto";
+import { Prototype, prototypeRegistry } from "./prototype";
 
 class Card {
   public id: string;
@@ -14,6 +15,11 @@ class Card {
     this.description = description;
     this.createdAt = new Date();
     this.id = randomUUID();
+    prototypeRegistry.registerPrototype(this.id, this);
+  }
+
+  public clone(): Prototype {
+    return new Card(this.name, this.description);
   }
 }
 
