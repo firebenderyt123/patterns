@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
-import { Prototype, prototypeRegistry } from "./prototype";
+import { Prototype, prototypeRegistry } from "../../patterns/prototype";
 
-class Card {
+class Card implements Prototype {
   public id: string;
 
   public name: string;

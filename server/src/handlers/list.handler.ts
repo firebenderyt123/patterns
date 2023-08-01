@@ -1,8 +1,10 @@
-import type { Socket } from 'socket.io';
+import type { Socket } from "socket.io";
 
-import { ListEvent } from '../common/enums';
-import { List } from '../data/models/list';
-import { SocketHandler } from './socket.handler';
+import { ListEvent } from "../common/enums";
+import { List } from "../data/models/list";
+import { SocketHandler } from "./socket.handler";
+import { publisher } from "../patterns/observer";
+import { LogTypes } from "../common/enums/log.enums";
 
 export class ListHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
@@ -16,20 +18,36 @@ export class ListHandler extends SocketHandler {
   }
 
   private reorderLists(sourceIndex: number, destinationIndex: number): void {
-    const lists = this.db.getData();
-    const reorderedLists = this.reorderService.reorder(
-      lists,
-      sourceIndex,
-      destinationIndex,
-    );
-    this.db.setData(reorderedLists);
-    this.updateLists();
+    try {
+      const lists = this.db.getData();
+      const reorderedLists = this.reorderService.reorder(
+        lists,
+        sourceIndex,
+        destinationIndex
+      );
+      this.db.setData(reorderedLists);
+      this.updateLists();
+
+      const logMessage = `Lists reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}`;
+      publisher.changeState({ type: LogTypes.INFO, message: logMessage });
+    } catch (error) {
+      const errorMessage = `Error reordering lists: ${error.message}`;
+      publisher.changeState({ type: LogTypes.ERROR, message: errorMessage });
+    }
   }
 
   private createList(name: string): void {
-    const lists = this.db.getData();
-    const newList = new List(name);
-    this.db.setData(lists.concat(newList));
-    this.updateLists();
+    try {
+      const lists = this.db.getData();
+      const newList = new List(name);
+      this.db.setData(lists.concat(newList));
+      this.updateLists();
+
+      const logMessage = `List created: name=${name}`;
+      publisher.changeState({ type: LogTypes.INFO, message: logMessage });
+    } catch (error) {
+      const errorMessage = `Error creating list: ${error.message}`;
+      publisher.changeState({ type: LogTypes.ERROR, message: errorMessage });
+    }
   }
 }
