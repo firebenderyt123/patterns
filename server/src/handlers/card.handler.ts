@@ -18,7 +18,7 @@ export class CardHandler extends SocketHandler {
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
   }
 
-  public createCard(listId: string, cardName: string): void {
+  private createCard(listId: string, cardName: string): void {
     try {
       const newCard = new Card(cardName, "");
       const lists = this.db.getData();
@@ -39,7 +39,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  public renameCard(cardId: string, cardName: string) {
+  private renameCard(cardId: string, cardName: string) {
     try {
       const lists = this.db.getData();
 
@@ -61,7 +61,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  public changeDescriptionCard(cardId: string, description: string) {
+  private changeDescriptionCard(cardId: string, description: string) {
     try {
       const lists = this.db.getData();
 
@@ -85,7 +85,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  public deleteCard(cardId: string) {
+  private deleteCard(cardId: string) {
     try {
       const lists = this.db.getData();
 
@@ -103,7 +103,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  public dublicateCard(cardId: string) {
+  private dublicateCard(cardId: string) {
     try {
       const lists = this.db.getData();
 

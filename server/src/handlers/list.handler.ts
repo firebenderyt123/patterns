@@ -8,6 +8,8 @@ import { logger } from "../patterns/observer";
 export class ListHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
     socket.on(ListEvent.CREATE, this.createList.bind(this));
+    socket.on(ListEvent.RENAME, this.renameList.bind(this));
+    socket.on(ListEvent.DELETE, this.deleteList.bind(this));
     socket.on(ListEvent.GET, this.getLists.bind(this));
     socket.on(ListEvent.REORDER, this.reorderLists.bind(this));
   }
@@ -44,9 +46,41 @@ export class ListHandler extends SocketHandler {
       this.updateLists();
 
       // PATTERN: observer
-      logger.writeInfo(`List created: name=${name}`);
+      logger.writeInfo(`List created: ${name}`);
     } catch (error) {
-      logger.writeError(`Error creating list: ${error.message}`);
+      logger.writeError(`Error creating list ${name}: ${error.message}`);
+    }
+  }
+
+  private renameList(listId: string, name: string) {
+    try {
+      const lists = this.db.getData();
+
+      const newList = lists.find((list) => list.id === listId).rename(name);
+
+      this.db.setData(lists.concat(newList));
+      this.updateLists();
+
+      // PATTERN: observer
+      logger.writeInfo(`List renamed: ${name}`);
+    } catch (error) {
+      logger.writeError(`Error renaming list ${name}: ${error.message}`);
+    }
+  }
+
+  private deleteList(listId: string) {
+    try {
+      const lists = this.db.getData();
+
+      const updatedLists = lists.filter((list) => list.id !== listId);
+
+      this.db.setData(updatedLists);
+      this.updateLists();
+
+      // PATTERN: observer
+      logger.writeInfo(`List deleted: ${listId}`);
+    } catch (error) {
+      logger.writeError(`Error deleting list ${listId}: ${error.message}`);
     }
   }
 }
