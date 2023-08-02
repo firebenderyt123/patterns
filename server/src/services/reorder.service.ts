@@ -124,4 +124,4 @@ const reorderService = new ReorderService();
 const reorderServiceProxy = new ReorderServiceProxy(reorderService);
 
 export type { Reorder };
-export { reorderServiceProxy };
+export { ReorderServiceProxy, reorderServiceProxy };
