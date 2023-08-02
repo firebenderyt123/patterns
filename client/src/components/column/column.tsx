@@ -15,7 +15,7 @@ import { Container } from "./styled/container";
 import { Header } from "./styled/header";
 import { useContext } from "react";
 import { SocketContext } from "../../context/socket";
-import { CardEvent } from "../../common/enums";
+import { CardEvent, ListEvent } from "../../common/enums";
 
 type Props = {
   listId: string;
@@ -31,7 +31,9 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
     socket.emit(CardEvent.CREATE, listId, name);
   };
 
-  const deleteHandler = () => {};
+  const deleteHandler = () => {
+    socket.emit(ListEvent.DELETE, listId);
+  };
 
   return (
     <Draggable draggableId={listId} index={index}>
