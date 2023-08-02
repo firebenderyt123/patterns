@@ -56,9 +56,11 @@ export class ListHandler extends SocketHandler {
     try {
       const lists = this.db.getData();
 
-      const newList = lists.find((list) => list.id === listId).rename(name);
+      const updatedLists = lists.map((list) =>
+        list.id === listId ? list.rename(name) : list
+      );
 
-      this.db.setData(lists.concat(newList));
+      this.db.setData(updatedLists);
       this.updateLists();
 
       // PATTERN: observer
