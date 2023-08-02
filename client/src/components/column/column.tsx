@@ -31,6 +31,8 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
     socket.emit(CardEvent.CREATE, listId, name);
   };
 
+  const deleteHandler = () => {};
+
   return (
     <Draggable draggableId={listId} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -53,7 +55,7 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
               bold
             />
             <Splitter />
-            <DeleteButton color="#FFF0" onClick={() => {}} />
+            <DeleteButton color="#FFF0" onClick={deleteHandler} />
           </Header>
           <CardsList
             listId={listId}
