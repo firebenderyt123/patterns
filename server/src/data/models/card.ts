@@ -20,6 +20,7 @@ class Card implements Prototype {
 
   public rename(name: string) {
     this.name = name;
+    return this;
   }
 
   // PATTERN: prototype

@@ -8,7 +8,8 @@ import { logger } from "../patterns/observer";
 export class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
     socket.on(CardEvent.CREATE, this.createCard.bind(this));
-    socket.on(CardEvent.RENAME, this.rename.bind(this));
+    socket.on(CardEvent.RENAME, this.renameCard.bind(this));
+    socket.on(CardEvent.DELETE, this.deleteCard.bind(this));
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
   }
 
@@ -33,20 +34,17 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  public rename(cardId: string, cardName: string) {
+  public renameCard(cardId: string, cardName: string) {
     try {
       const lists = this.db.getData();
 
-      const updatedLists = lists.map((list) => {
-        const updatedCards = list.cards.map((card) => {
-          if (card.id === cardId) {
-            card.rename(cardName);
-          }
-          return card;
-        });
-        list.setCards(updatedCards);
-        return list;
-      });
+      const updatedLists = lists.map((list) =>
+        list.setCards(
+          list.cards.map((card) =>
+            card.id === cardId ? card.rename(cardName) : card
+          )
+        )
+      );
 
       this.db.setData(updatedLists);
       this.updateLists();
@@ -55,6 +53,24 @@ export class CardHandler extends SocketHandler {
       logger.writeInfo(`Card name changed ${cardId}: ${cardName}`);
     } catch (error) {
       logger.writeError(`Error changing card name ${cardId}: ${error.message}`);
+    }
+  }
+
+  public deleteCard(cardId: string) {
+    try {
+      const lists = this.db.getData();
+
+      const updatedLists = lists.map((list) =>
+        list.setCards(list.cards.filter((card) => card.id !== cardId))
+      );
+
+      this.db.setData(updatedLists);
+      this.updateLists();
+
+      // PATTERN: observer
+      logger.writeInfo(`Card was deleted: ${cardId}`);
+    } catch (error) {
+      logger.writeError(`Error deleting card ${cardId}: ${error.message}`);
     }
   }
 
