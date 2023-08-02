@@ -4,7 +4,6 @@ import { CardEvent } from "../common/enums";
 import { Card } from "../data/models/card";
 import { SocketHandler } from "./socket.handler";
 import { logger } from "../patterns/observer";
-import { LogTypes } from "../common/enums/log.enums";
 
 export class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {

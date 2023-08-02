@@ -4,7 +4,6 @@ import { ListEvent } from "../common/enums";
 import { List } from "../data/models/list";
 import { SocketHandler } from "./socket.handler";
 import { logger } from "../patterns/observer";
-import { LogTypes } from "../common/enums/log.enums";
 
 export class ListHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
