@@ -1,4 +1,5 @@
-import { writeFileSync } from "fs";
+import { mkdirSync, appendFileSync } from "fs";
+import { dirname } from "path";
 import { ALL_LOGS_PATH } from "../config/log";
 import { LogTypes } from "../common/enums/log.enums";
 
@@ -73,12 +74,23 @@ class LogFileSubscriber extends LogConsoleSubscriber {
   constructor(filePath: string) {
     super();
     this.filePath = filePath;
+    this.createPath(filePath);
+  }
+
+  createPath(filePath: string) {
+    try {
+      const folderPath = dirname(filePath);
+      mkdirSync(folderPath, { recursive: true });
+      console.log("Path created successfully.");
+    } catch (err) {
+      console.error("Error creating path:", err);
+    }
   }
 
   getNotification(state: State): void {
     try {
       const dataToWrite = `${state.type}: ${state.message}\n`;
-      writeFileSync(this.filePath, dataToWrite, "utf8");
+      appendFileSync(this.filePath, dataToWrite, "utf8");
     } catch (error) {
       console.error(`Error writing state to file: ${error.message}`);
     }

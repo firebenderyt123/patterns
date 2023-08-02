@@ -86,7 +86,9 @@ class ReorderServiceProxy extends ReorderService implements Reorder {
 
   public reorder<T>(items: T[], startIndex: number, endIndex: number): T[] {
     logger.writeInfo(
-      `ReorderService.reorder called with parameters: items=${items}, startIndex=${startIndex}, endIndex=${endIndex}`
+      `ReorderService.reorder called with parameters: items=${JSON.stringify(
+        items.toString
+      )}, startIndex=${startIndex}, endIndex=${endIndex}`
     );
     const result = this.reorderService.reorder(items, startIndex, endIndex);
     logger.writeInfo(`ReorderService.reorder executed successfully.`);
@@ -106,7 +108,9 @@ class ReorderServiceProxy extends ReorderService implements Reorder {
     destinationListId: string;
   }): List[] {
     logger.writeInfo(
-      `ReorderService.reorderCards called with parameters: lists=${lists}, sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}, sourceListId=${sourceListId}, destinationListId=${destinationListId}`
+      `ReorderService.reorderCards called with parameters: lists=${JSON.stringify(
+        lists
+      )}, sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}, sourceListId=${sourceListId}, destinationListId=${destinationListId}`
     );
     const result = this.reorderService.reorderCards({
       lists,
