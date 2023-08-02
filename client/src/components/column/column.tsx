@@ -35,8 +35,8 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
     socket.emit(ListEvent.DELETE, listId);
   };
 
-  const onTitleChange = (newName: string) => {
-    socket.emit(ListEvent.RENAME, newName);
+  const onTitleChange = (name: string) => {
+    socket.emit(ListEvent.RENAME, listId, name);
   };
 
   return (
