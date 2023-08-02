@@ -18,6 +18,10 @@ class Card implements Prototype {
     prototypeRegistry.registerPrototype(this.id, this); // PATTERN: prototype
   }
 
+  public rename(name: string) {
+    this.name = name;
+  }
+
   // PATTERN: prototype
   public clone(): Prototype {
     return new Card(this.name, this.description);

@@ -8,6 +8,7 @@ import { logger } from "../patterns/observer";
 export class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
     socket.on(CardEvent.CREATE, this.createCard.bind(this));
+    socket.on(CardEvent.RENAME, this.rename.bind(this));
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
   }
 
@@ -29,6 +30,31 @@ export class CardHandler extends SocketHandler {
       logger.writeError(
         `Error creating card in list ${listId}: ${error.message}`
       );
+    }
+  }
+
+  public rename(cardId: string, cardName: string) {
+    try {
+      const lists = this.db.getData();
+
+      const updatedLists = lists.map((list) => {
+        const updatedCards = list.cards.map((card) => {
+          if (card.id === cardId) {
+            card.rename(cardName);
+          }
+          return card;
+        });
+        list.setCards(updatedCards);
+        return list;
+      });
+
+      this.db.setData(updatedLists);
+      this.updateLists();
+
+      // PATTERN: observer
+      logger.writeInfo(`Card name changed ${cardId}: ${cardName}`);
+    } catch (error) {
+      logger.writeError(`Error changing card name ${cardId}: ${error.message}`);
     }
   }
 
