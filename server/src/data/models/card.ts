@@ -23,6 +23,11 @@ class Card implements Prototype {
     return this;
   }
 
+  public changeDescription(description: string) {
+    this.description = description;
+    return this;
+  }
+
   // PATTERN: prototype
   public clone(): Prototype {
     return new Card(this.name, this.description);

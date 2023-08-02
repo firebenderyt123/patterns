@@ -9,6 +9,10 @@ export class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
     socket.on(CardEvent.CREATE, this.createCard.bind(this));
     socket.on(CardEvent.RENAME, this.renameCard.bind(this));
+    socket.on(
+      CardEvent.CHANGE_DESCRIPTION,
+      this.changeDescriptionCard.bind(this)
+    );
     socket.on(CardEvent.DELETE, this.deleteCard.bind(this));
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
   }
@@ -53,6 +57,30 @@ export class CardHandler extends SocketHandler {
       logger.writeInfo(`Card name changed ${cardId}: ${cardName}`);
     } catch (error) {
       logger.writeError(`Error changing card name ${cardId}: ${error.message}`);
+    }
+  }
+
+  public changeDescriptionCard(cardId: string, description: string) {
+    try {
+      const lists = this.db.getData();
+
+      const updatedLists = lists.map((list) =>
+        list.setCards(
+          list.cards.map((card) =>
+            card.id === cardId ? card.changeDescription(description) : card
+          )
+        )
+      );
+
+      this.db.setData(updatedLists);
+      this.updateLists();
+
+      // PATTERN: observer
+      logger.writeInfo(`Card description changed ${cardId}: ${description}`);
+    } catch (error) {
+      logger.writeError(
+        `Error changing card description ${cardId}: ${error.message}`
+      );
     }
   }
 
