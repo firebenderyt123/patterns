@@ -29,7 +29,7 @@ class Card implements Prototype {
   }
 
   // PATTERN: prototype
-  public clone(): Prototype {
+  public clone(): Card {
     return new Card(this.name, this.description);
   }
 }

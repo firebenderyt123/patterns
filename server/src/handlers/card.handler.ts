@@ -14,6 +14,7 @@ export class CardHandler extends SocketHandler {
       this.changeDescriptionCard.bind(this)
     );
     socket.on(CardEvent.DELETE, this.deleteCard.bind(this));
+    socket.on(CardEvent.DUBLICATE, this.dublicateCard.bind(this));
     socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
   }
 
@@ -99,6 +100,34 @@ export class CardHandler extends SocketHandler {
       logger.writeInfo(`Card was deleted: ${cardId}`);
     } catch (error) {
       logger.writeError(`Error deleting card ${cardId}: ${error.message}`);
+    }
+  }
+
+  public dublicateCard(cardId: string) {
+    try {
+      const lists = this.db.getData();
+
+      const cardToFind = lists
+        .flatMap((list) => list.cards)
+        .find((card) => card.id === cardId);
+
+      const listId = lists.find((list) =>
+        list.cards.some((card) => card.id === cardId)
+      ).id;
+
+      const newCard = cardToFind.clone();
+
+      const updatedLists = lists.map((list) =>
+        list.id === listId ? list.setCards(list.cards.concat(newCard)) : list
+      );
+
+      this.db.setData(updatedLists);
+      this.updateLists();
+
+      // PATTERN: observer
+      logger.writeInfo(`Card dublicated: ${cardId}`);
+    } catch (error) {
+      logger.writeError(`Error dublicating card ${cardId}: ${error.message}`);
     }
   }
 

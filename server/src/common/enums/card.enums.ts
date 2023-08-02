@@ -3,6 +3,7 @@ enum CardEvent {
   RENAME = "card:rename",
   CHANGE_DESCRIPTION = "card:change-description",
   DELETE = "card:delete",
+  DUBLICATE = "card:dublicate",
   REORDER = "card:reorder",
 }
 
