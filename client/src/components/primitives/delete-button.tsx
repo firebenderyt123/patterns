@@ -10,7 +10,11 @@ type Props = {
 
 const DeleteButton = ({ onClick, color }: Props) => {
   return (
-    <Button className="delete-btn" onClick={onClick} color={color ?? colors.N30}>
+    <Button
+      className="delete-btn"
+      onClick={onClick}
+      color={color ?? colors.N30}
+    >
       <DeleteIcon />
     </Button>
   );

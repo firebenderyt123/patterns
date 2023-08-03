@@ -2,7 +2,11 @@
   "name": "bsa-patterns-hw",
   "version": "0.0.0",
   "description": "Starter for Patterns Practises and Principles homework. Binary Studio Academy",
-  "scripts": {},
+  "scripts": {
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npx prettier . --write",
+    "lint": "eslint ."
+  },
   "author": "Vitalii Yarmus",
   "license": "MIT",
   "workspaces": [
@@ -14,6 +18,11 @@
     "npm": ">=8 <9"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "eslint": "^8.46.0",
+    "eslint-plugin-react": "^7.33.1",
+    "prettier": "3.0.1",
     "typescript": "4.9.5"
   }
 }

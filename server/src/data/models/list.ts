@@ -1,8 +1,9 @@
 import { randomUUID } from 'crypto';
 
 import { Card } from './card';
+import { Prototype } from '../../patterns/prototype';
 
-class List {
+class List implements Prototype {
   public id: string;
 
   public name: string;
@@ -14,10 +15,21 @@ class List {
     this.id = randomUUID();
   }
 
-  setCards(cards: Card[]) {
-    this.cards = cards;
-
+  public rename(name: string): List {
+    this.name = name;
     return this;
+  }
+
+  public setCards(cards: Card[]): List {
+    this.cards = cards;
+    return this;
+  }
+
+  // PATTERN: prototype
+  public clone(): List {
+    const newList = new List(this.name);
+    newList.setCards(this.cards.map((card) => card.clone()));
+    return newList;
   }
 }
 

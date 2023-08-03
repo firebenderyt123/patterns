@@ -6,7 +6,7 @@ import { GRID } from '../../../common/constants';
 
 const getBackgroundColor = (
   isDraggingOver: boolean,
-  isDraggingFrom: boolean,
+  isDraggingFrom: boolean
 ): string => {
   if (isDraggingOver) {
     return colors.R50;
@@ -33,7 +33,9 @@ const ListWrapper = styled.div<Props>`
   padding: ${GRID}px;
   border: ${GRID}px;
   padding-bottom: 0;
-  transition: background-color 0.2s ease, opacity 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.1s ease;
   user-select: none;
   width: 300px;
 `;

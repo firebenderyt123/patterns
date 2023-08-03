@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
+import { Prototype, prototypeRegistry } from '../../patterns/prototype';
 
-class Card {
+class Card implements Prototype {
   public id: string;
 
   public name: string;
@@ -14,6 +15,22 @@ class Card {
     this.description = description;
     this.createdAt = new Date();
     this.id = randomUUID();
+    prototypeRegistry.registerPrototype(this.id, this); // PATTERN: prototype
+  }
+
+  public rename(name: string) {
+    this.name = name;
+    return this;
+  }
+
+  public changeDescription(description: string) {
+    this.description = description;
+    return this;
+  }
+
+  // PATTERN: prototype
+  public clone(): Card {
+    return new Card(this.name, this.description);
   }
 }
 

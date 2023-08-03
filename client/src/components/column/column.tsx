@@ -13,6 +13,9 @@ import { Title } from '../primitives/title';
 import { Footer } from './components/footer';
 import { Container } from './styled/container';
 import { Header } from './styled/header';
+import { useContext } from 'react';
+import { SocketContext } from '../../context/socket';
+import { CardEvent, ListEvent } from '../../common/enums';
 
 type Props = {
   listId: string;
@@ -22,10 +25,28 @@ type Props = {
 };
 
 export const Column = ({ listId, listName, cards, index }: Props) => {
+  const socket = useContext(SocketContext);
+
+  const onCreateCard = (name: string) => {
+    socket.emit(CardEvent.CREATE, listId, name);
+  };
+
+  const deleteHandler = () => {
+    socket.emit(ListEvent.DELETE, listId);
+  };
+
+  const onTitleChange = (name: string) => {
+    socket.emit(ListEvent.RENAME, listId, name);
+  };
+
   return (
     <Draggable draggableId={listId} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-        <Container className="column-container" ref={provided.innerRef} {...provided.draggableProps}>
+        <Container
+          className="column-container"
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
           <Header
             className="column-header"
             isDragging={snapshot.isDragging}
@@ -34,13 +55,13 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
             <Title
               aria-label={listName}
               title={listName}
-              onChange={() => {}}
+              onChange={onTitleChange}
               fontSize="large"
               width={200}
               bold
             />
             <Splitter />
-            <DeleteButton color="#FFF0" onClick={() => {}} />
+            <DeleteButton color="#FFF0" onClick={deleteHandler} />
           </Header>
           <CardsList
             listId={listId}
@@ -50,7 +71,7 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
             }}
             cards={cards}
           />
-          <Footer onCreateCard={() => {}} />
+          <Footer onCreateCard={onCreateCard} />
         </Container>
       )}
     </Draggable>

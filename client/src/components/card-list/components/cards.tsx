@@ -18,7 +18,7 @@ const Cards = ({ cards }: Props) => (
       <Draggable key={card.id} draggableId={card.id} index={index}>
         {(
           dragProvided: DraggableProvided,
-          dragSnapshot: DraggableStateSnapshot,
+          dragSnapshot: DraggableStateSnapshot
         ) => (
           <CardItem
             key={card.id}

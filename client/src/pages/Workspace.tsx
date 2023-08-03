@@ -6,7 +6,7 @@ import type {
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { CardEvent, ListEvent } from '../common/enums';
+import { CardEvent, HistoryEvent, ListEvent } from '../common/enums';
 import type { List } from '../common/types';
 import { Column } from '../components/column/column';
 import { ColumnCreator } from '../components/column-creator/column-creator';
@@ -25,6 +25,24 @@ export const Workspace = () => {
 
     return () => {
       socket.removeAllListeners(ListEvent.UPDATE).close();
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'z') {
+        event.preventDefault();
+        socket.emit(HistoryEvent.UNDO);
+      } else if (event.ctrlKey && event.key === 'y') {
+        event.preventDefault();
+        socket.emit(HistoryEvent.REDO);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -48,7 +66,7 @@ export const Workspace = () => {
 
     if (isReorderLists) {
       setLists(
-        reorderService.reorderLists(lists, source.index, destination.index),
+        reorderService.reorderLists(source.index, destination.index)(lists)
       );
       socket.emit(ListEvent.REORDER, source.index, destination.index);
 
@@ -62,6 +80,10 @@ export const Workspace = () => {
       sourceIndex: source.index,
       destinationIndex: destination.index,
     });
+  };
+
+  const onCreateList = (name: string) => {
+    socket.emit(ListEvent.CREATE, name);
   };
 
   return (
@@ -84,7 +106,7 @@ export const Workspace = () => {
                 />
               ))}
               {provided.placeholder}
-              <ColumnCreator onCreateList={() => {}} />
+              <ColumnCreator onCreateList={onCreateList} />
             </Container>
           )}
         </Droppable>
