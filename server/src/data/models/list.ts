@@ -28,7 +28,7 @@ class List implements Prototype {
   // PATTERN: prototype
   public clone(): List {
     const newList = new List(this.name);
-    newList.setCards([...this.cards]);
+    newList.setCards(this.cards.map((card) => card.clone()));
     return newList;
   }
 }

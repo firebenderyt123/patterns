@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 import { ListEvent } from "../common/enums";
 import { Database } from "../data/database";
 import { ReorderServiceProxy } from "../services/reorder.service";
-import { CareTaker, Originator } from "../patterns/snapshot";
+import { CareTaker, Originator } from "../patterns/memento";
 
 abstract class SocketHandler {
   protected db: Database;

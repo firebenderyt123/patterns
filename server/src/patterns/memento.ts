@@ -40,18 +40,15 @@ class History {
 
   public add(m: Memento): void {
     this.history = [...this.history.slice(0, ++this.currentIndex), m];
-    console.log(this.currentIndex, this.history.length);
   }
 
   public next(): Memento {
-    console.log(this.currentIndex + 1, this.history.length);
     if (this.currentIndex + 1 >= this.history.length)
       throw new Error("Next history error");
     return this.history[++this.currentIndex];
   }
 
   public prev(): Memento {
-    console.log(this.currentIndex - 1, this.history.length);
     if (this.currentIndex - 1 < 0) throw new Error("Prev history error");
     return this.history[--this.currentIndex];
   }
