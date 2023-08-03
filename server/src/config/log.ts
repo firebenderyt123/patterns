@@ -1,3 +1,3 @@
-const ALL_LOGS_PATH = './logs/all.log'
+const ALL_LOGS_PATH = './logs/all.log';
 
-export { ALL_LOGS_PATH }
+export { ALL_LOGS_PATH };

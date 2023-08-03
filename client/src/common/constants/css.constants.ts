@@ -1,4 +1,4 @@
-const GRID = 8
-const BORDER_RADIUS = 2
+const GRID = 8;
+const BORDER_RADIUS = 2;
 
-export { BORDER_RADIUS, GRID }
+export { BORDER_RADIUS, GRID };

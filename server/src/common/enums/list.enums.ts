@@ -7,4 +7,4 @@ enum ListEvent {
   DELETE = 'list:delete',
 }
 
-export { ListEvent }
+export { ListEvent };

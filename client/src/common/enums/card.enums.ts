@@ -7,4 +7,4 @@ enum CardEvent {
   DUBLICATE = 'card:dublicate',
 }
 
-export { CardEvent }
+export { CardEvent };

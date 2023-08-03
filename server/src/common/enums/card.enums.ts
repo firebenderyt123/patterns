@@ -7,4 +7,4 @@ enum CardEvent {
   REORDER = 'card:reorder',
 }
 
-export { CardEvent }
+export { CardEvent };

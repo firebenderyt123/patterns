@@ -1,12 +1,12 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
-import { BORDER_RADIUS } from '../../../common/constants'
+import { BORDER_RADIUS } from '../../../common/constants';
 
 type Props = {
-  fontSize: 'x-large' | 'large' | 'medium'
-  width?: number
-  bold?: boolean
-}
+  fontSize: 'x-large' | 'large' | 'medium';
+  width?: number;
+  bold?: boolean;
+};
 
 const Input = styled.input<Props>`
   border-radius: ${BORDER_RADIUS}px;
@@ -23,6 +23,6 @@ const Input = styled.input<Props>`
   &:focus {
     outline: solid 1px #4c9aff;
   }
-`
+`;
 
-export { Input }
+export { Input };

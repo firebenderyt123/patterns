@@ -4,4 +4,4 @@ enum LogTypes {
   ERROR = 'ERROR',
 }
 
-export { LogTypes }
+export { LogTypes };

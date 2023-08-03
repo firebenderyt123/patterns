@@ -3,4 +3,4 @@ enum HistoryEvent {
   UNDO = 'history:undo',
 }
 
-export { HistoryEvent }
+export { HistoryEvent };

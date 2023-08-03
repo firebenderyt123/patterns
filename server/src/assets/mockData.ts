@@ -1,7 +1,7 @@
-import { Card } from '../data/models/card'
-import { List } from '../data/models/list'
+import { Card } from '../data/models/card';
+import { List } from '../data/models/list';
 
-const toDo = new List('To do')
+const toDo = new List('To do');
 toDo.cards = [
   new Card(
     'Implement renaming lists',
@@ -32,11 +32,11 @@ toDo.cards = [
     'Implement logging of reorder action',
     'Using pattern Proxy implement logging for the ReorderService (logging proxy). Should be logged each what card/list and when was moved'
   ),
-]
+];
 
-const inProgress = new List('In progress')
+const inProgress = new List('In progress');
 inProgress.cards = [
   new Card('Implement adding lists', 'Should be possible to create list'),
-]
+];
 
-export const lists = [toDo, inProgress]
+export const lists = [toDo, inProgress];

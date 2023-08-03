@@ -1,21 +1,21 @@
 import type {
   DroppableProvided,
   DroppableStateSnapshot,
-} from '@hello-pangea/dnd'
-import { Droppable } from '@hello-pangea/dnd'
-import { CSSProperties } from 'react'
+} from '@hello-pangea/dnd';
+import { Droppable } from '@hello-pangea/dnd';
+import { CSSProperties } from 'react';
 
-import type { Card } from '../../common/types'
-import { List } from './components/list'
-import { ListWrapper } from './styled/list-wrapper'
-import { ScrollContainer } from './styled/scroll-container'
+import type { Card } from '../../common/types';
+import { List } from './components/list';
+import { ListWrapper } from './styled/list-wrapper';
+import { ScrollContainer } from './styled/scroll-container';
 
 type Props = {
-  listId: string
-  listType: string
-  cards: Card[]
-  style: CSSProperties
-}
+  listId: string;
+  listType: string;
+  cards: Card[];
+  style: CSSProperties;
+};
 
 const CardsList = ({ listId, listType, style, cards }: Props) => {
   return (
@@ -36,7 +36,7 @@ const CardsList = ({ listId, listType, style, cards }: Props) => {
         </ListWrapper>
       )}
     </Droppable>
-  )
-}
+  );
+};
 
-export { CardsList }
+export { CardsList };
