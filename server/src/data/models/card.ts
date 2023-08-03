@@ -1,37 +1,37 @@
-import { randomUUID } from "crypto";
-import { Prototype, prototypeRegistry } from "../../patterns/prototype";
+import { randomUUID } from 'crypto'
+import { Prototype, prototypeRegistry } from '../../patterns/prototype'
 
 class Card implements Prototype {
-  public id: string;
+  public id: string
 
-  public name: string;
+  public name: string
 
-  public description: string;
+  public description: string
 
-  public createdAt: Date;
+  public createdAt: Date
 
   public constructor(name: string, description: string) {
-    this.name = name;
-    this.description = description;
-    this.createdAt = new Date();
-    this.id = randomUUID();
-    prototypeRegistry.registerPrototype(this.id, this); // PATTERN: prototype
+    this.name = name
+    this.description = description
+    this.createdAt = new Date()
+    this.id = randomUUID()
+    prototypeRegistry.registerPrototype(this.id, this) // PATTERN: prototype
   }
 
   public rename(name: string) {
-    this.name = name;
-    return this;
+    this.name = name
+    return this
   }
 
   public changeDescription(description: string) {
-    this.description = description;
-    return this;
+    this.description = description
+    return this
   }
 
   // PATTERN: prototype
   public clone(): Card {
-    return new Card(this.name, this.description);
+    return new Card(this.name, this.description)
   }
 }
 
-export { Card };
+export { Card }

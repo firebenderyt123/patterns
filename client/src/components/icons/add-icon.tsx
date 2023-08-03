@@ -1,10 +1,10 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 const Svg = styled.svg`
   color: #ffffff;
   width: 2em;
   height: 2em;
-`;
+`
 
 const AddIcon = () => (
   <Svg
@@ -22,6 +22,6 @@ const AddIcon = () => (
     <path d="M12 5l0 14"></path>
     <path d="M5 12l14 0"></path>
   </Svg>
-);
+)
 
-export { AddIcon };
+export { AddIcon }

@@ -1,50 +1,50 @@
-import type { Socket } from "socket.io";
+import type { Socket } from 'socket.io'
 
-import { CardEvent } from "../common/enums";
-import { Card } from "../data/models/card";
-import { SocketHandler, careTaker } from "./socket.handler";
-import { logger } from "../patterns/observer";
+import { CardEvent } from '../common/enums'
+import { Card } from '../data/models/card'
+import { SocketHandler, careTaker } from './socket.handler'
+import { logger } from '../patterns/observer'
 
 export class CardHandler extends SocketHandler {
   public handleConnection(socket: Socket): void {
-    socket.on(CardEvent.CREATE, this.createCard.bind(this));
-    socket.on(CardEvent.RENAME, this.renameCard.bind(this));
+    socket.on(CardEvent.CREATE, this.createCard.bind(this))
+    socket.on(CardEvent.RENAME, this.renameCard.bind(this))
     socket.on(
       CardEvent.CHANGE_DESCRIPTION,
       this.changeDescriptionCard.bind(this)
-    );
-    socket.on(CardEvent.DELETE, this.deleteCard.bind(this));
-    socket.on(CardEvent.DUBLICATE, this.dublicateCard.bind(this));
-    socket.on(CardEvent.REORDER, this.reorderCards.bind(this));
+    )
+    socket.on(CardEvent.DELETE, this.deleteCard.bind(this))
+    socket.on(CardEvent.DUBLICATE, this.dublicateCard.bind(this))
+    socket.on(CardEvent.REORDER, this.reorderCards.bind(this))
   }
 
   private createCard(listId: string, cardName: string): void {
     try {
-      const newCard = new Card(cardName, "");
-      const lists = this.db.getData();
+      const newCard = new Card(cardName, '')
+      const lists = this.db.getData()
 
       const updatedLists = lists.map((list) =>
         list.id === listId ? list.setCards(list.cards.concat(newCard)) : list
-      );
+      )
 
-      this.db.setData(updatedLists);
-      this.updateLists();
+      this.db.setData(updatedLists)
+      this.updateLists()
 
       // PATTERN: memento
-      careTaker.makeBackup(updatedLists);
+      careTaker.makeBackup(updatedLists)
 
       // PATTERN: observer
-      logger.writeInfo(`Card created in list ${listId}: ${cardName}`);
+      logger.writeInfo(`Card created in list ${listId}: ${cardName}`)
     } catch (error) {
       logger.writeError(
         `Error creating card in list ${listId}: ${error.message}`
-      );
+      )
     }
   }
 
   private renameCard(cardId: string, cardName: string): void {
     try {
-      const lists = this.db.getData();
+      const lists = this.db.getData()
 
       const updatedLists = lists.map((list) =>
         list.setCards(
@@ -52,24 +52,24 @@ export class CardHandler extends SocketHandler {
             card.id === cardId ? card.rename(cardName) : card
           )
         )
-      );
+      )
 
-      this.db.setData(updatedLists);
-      this.updateLists();
+      this.db.setData(updatedLists)
+      this.updateLists()
 
       // PATTERN: memento
-      careTaker.makeBackup(updatedLists);
+      careTaker.makeBackup(updatedLists)
 
       // PATTERN: observer
-      logger.writeInfo(`Card name changed ${cardId}: ${cardName}`);
+      logger.writeInfo(`Card name changed ${cardId}: ${cardName}`)
     } catch (error) {
-      logger.writeError(`Error changing card name ${cardId}: ${error.message}`);
+      logger.writeError(`Error changing card name ${cardId}: ${error.message}`)
     }
   }
 
   private changeDescriptionCard(cardId: string, description: string): void {
     try {
-      const lists = this.db.getData();
+      const lists = this.db.getData()
 
       const updatedLists = lists.map((list) =>
         list.setCards(
@@ -77,72 +77,72 @@ export class CardHandler extends SocketHandler {
             card.id === cardId ? card.changeDescription(description) : card
           )
         )
-      );
+      )
 
-      this.db.setData(updatedLists);
-      this.updateLists();
+      this.db.setData(updatedLists)
+      this.updateLists()
 
       // PATTERN: memento
-      careTaker.makeBackup(updatedLists);
+      careTaker.makeBackup(updatedLists)
 
       // PATTERN: observer
-      logger.writeInfo(`Card description changed ${cardId}: ${description}`);
+      logger.writeInfo(`Card description changed ${cardId}: ${description}`)
     } catch (error) {
       logger.writeError(
         `Error changing card description ${cardId}: ${error.message}`
-      );
+      )
     }
   }
 
   private deleteCard(cardId: string): void {
     try {
-      const lists = this.db.getData();
+      const lists = this.db.getData()
 
       const updatedLists = lists.map((list) =>
         list.setCards(list.cards.filter((card) => card.id !== cardId))
-      );
+      )
 
-      this.db.setData(updatedLists);
-      this.updateLists();
+      this.db.setData(updatedLists)
+      this.updateLists()
 
       // PATTERN: memento
-      careTaker.makeBackup(updatedLists);
+      careTaker.makeBackup(updatedLists)
 
       // PATTERN: observer
-      logger.writeInfo(`Card was deleted: ${cardId}`);
+      logger.writeInfo(`Card was deleted: ${cardId}`)
     } catch (error) {
-      logger.writeError(`Error deleting card ${cardId}: ${error.message}`);
+      logger.writeError(`Error deleting card ${cardId}: ${error.message}`)
     }
   }
 
   private dublicateCard(cardId: string): void {
     try {
-      const lists = this.db.getData();
+      const lists = this.db.getData()
 
       const cardToFind = lists
         .flatMap((list) => list.cards)
-        .find((card) => card.id === cardId);
+        .find((card) => card.id === cardId)
 
       const listId = lists.find((list) =>
         list.cards.some((card) => card.id === cardId)
-      ).id;
+      ).id
 
-      const newCard = cardToFind.clone();
+      const newCard = cardToFind.clone()
 
       const updatedLists = lists.map((list) =>
         list.id === listId ? list.setCards(list.cards.concat(newCard)) : list
-      );
+      )
 
-      this.db.setData(updatedLists);
-      this.updateLists();
+      this.db.setData(updatedLists)
+      this.updateLists()
 
       // PATTERN: memento
-      careTaker.makeBackup(updatedLists);
+      careTaker.makeBackup(updatedLists)
 
       // PATTERN: observer
-      logger.writeInfo(`Card dublicated: ${cardId}`);
+      logger.writeInfo(`Card dublicated: ${cardId}`)
     } catch (error) {
-      logger.writeError(`Error dublicating card ${cardId}: ${error.message}`);
+      logger.writeError(`Error dublicating card ${cardId}: ${error.message}`)
     }
   }
 
@@ -152,32 +152,32 @@ export class CardHandler extends SocketHandler {
     sourceListId,
     destinationListId,
   }: {
-    sourceIndex: number;
-    destinationIndex: number;
-    sourceListId: string;
-    destinationListId: string;
+    sourceIndex: number
+    destinationIndex: number
+    sourceListId: string
+    destinationListId: string
   }): void {
     try {
-      const lists = this.db.getData();
+      const lists = this.db.getData()
       const reordered = this.reorderService.reorderCards({
         lists,
         sourceIndex,
         destinationIndex,
         sourceListId,
         destinationListId,
-      });
-      this.db.setData(reordered);
-      this.updateLists();
+      })
+      this.db.setData(reordered)
+      this.updateLists()
 
       // PATTERN: memento
-      careTaker.makeBackup(reordered);
+      careTaker.makeBackup(reordered)
 
       // PATTERN: observer
       logger.writeInfo(
         `Cards reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}, sourceListId=${sourceListId}, destinationListId=${destinationListId}`
-      );
+      )
     } catch (error) {
-      logger.writeError(`Error reordering cards: ${error.message}`);
+      logger.writeError(`Error reordering cards: ${error.message}`)
     }
   }
 }

@@ -1,6 +1,6 @@
 enum HistoryEvent {
-  REDO = "history:redo",
-  UNDO = "history:undo",
+  REDO = 'history:redo',
+  UNDO = 'history:undo',
 }
 
-export { HistoryEvent };
+export { HistoryEvent }

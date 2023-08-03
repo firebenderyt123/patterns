@@ -1,11 +1,11 @@
-import { colors } from '@atlaskit/theme';
-import styled from '@emotion/styled';
+import { colors } from '@atlaskit/theme'
+import styled from '@emotion/styled'
 
-import { BORDER_RADIUS, GRID } from '../../../common/constants';
+import { BORDER_RADIUS, GRID } from '../../../common/constants'
 
 type Props = {
-  isDragging: boolean;
-};
+  isDragging: boolean
+}
 
 const Container = styled.a<Props>`
   border-radius: ${BORDER_RADIUS}px;
@@ -37,6 +37,6 @@ const Container = styled.a<Props>`
   }
 
   display: flex;
-`;
+`
 
-export { Container };
+export { Container }

@@ -1,7 +1,7 @@
 enum LogTypes {
-  INFO = "INFO",
-  WARNING = "WARNING",
-  ERROR = "ERROR",
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR',
 }
 
-export { LogTypes };
+export { LogTypes }

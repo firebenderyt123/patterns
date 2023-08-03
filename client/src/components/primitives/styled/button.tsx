@@ -1,7 +1,7 @@
-import { colors } from '@atlaskit/theme';
-import styled from '@emotion/styled';
+import { colors } from '@atlaskit/theme'
+import styled from '@emotion/styled'
 
-import { BORDER_RADIUS } from '../../../common/constants';
+import { BORDER_RADIUS } from '../../../common/constants'
 
 const Button = styled.button`
   background-color: ${({ color }) => color || colors.B100};
@@ -15,6 +15,6 @@ const Button = styled.button`
   &:focus {
     outline: solid 1px #4c9aff;
   }
-`;
+`
 
-export { Button };
+export { Button }

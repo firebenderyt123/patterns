@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "description": "Starter for Patterns Practises and Principles homework. Binary Studio Academy",
   "scripts": {
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npx prettier . --write",
     "lint": "eslint ."
   },
   "author": "Vitalii Yarmus",
@@ -20,6 +22,7 @@
     "@typescript-eslint/parser": "^6.2.1",
     "eslint": "^8.46.0",
     "eslint-plugin-react": "^7.33.1",
+    "prettier": "3.0.1",
     "typescript": "4.9.5"
   }
 }

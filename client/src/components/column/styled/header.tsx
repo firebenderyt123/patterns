@@ -1,12 +1,12 @@
-import { colors } from '@atlaskit/theme';
-import styled from '@emotion/styled';
-import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
+import { colors } from '@atlaskit/theme'
+import styled from '@emotion/styled'
+import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd'
 
-import { BORDER_RADIUS } from '../../../common/constants';
+import { BORDER_RADIUS } from '../../../common/constants'
 
 type Props = (DraggableProvidedDragHandleProps | object) & {
-  isDragging: boolean;
-};
+  isDragging: boolean
+}
 
 const Header = styled.div<Props>`
   display: flex;
@@ -22,6 +22,6 @@ const Header = styled.div<Props>`
   &:hover {
     background-color: ${colors.G50};
   }
-`;
+`
 
-export { Header };
+export { Header }
