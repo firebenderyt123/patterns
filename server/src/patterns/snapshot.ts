@@ -1,67 +1,87 @@
+import { List } from "../data/models/list";
+
 // PATTERN: memento
+type State = List[];
+class Memento {
+  private state: State;
 
-class Snapshot<T> {
-  private state: T;
-
-  public constructor(state: T) {
+  public constructor(state: State) {
     this.state = state;
   }
 
-  public getState(): T {
+  public getState(): State {
     return this.state;
   }
 }
 
-class Originator<T> {
-  private state: T;
+class Originator {
+  private state: State;
 
-  public save(): Snapshot<T> {
-    return new Snapshot(this.state);
+  public save(): Memento {
+    if (this.state) {
+      return new Memento(this.state.map((list) => list.clone()));
+    }
+    throw new Error("Originator has no state.");
   }
 
-  public restore(m: Snapshot<T>): void {
+  public restore(m: Memento): void {
     this.state = m.getState();
   }
 }
 
-class CareTaker<T> {
-  private originator: Originator<T>;
-  private redoHistory: Snapshot<T>[];
-  private undoHistory: Snapshot<T>[];
+class History {
+  private history: Memento[];
+  private currentIndex: number;
 
-  public constructor(originator: Originator<T>) {
+  constructor() {
+    this.history = [];
+    this.currentIndex = -1;
+  }
+
+  public add(m: Memento): void {
+    this.history = [...this.history.slice(0, ++this.currentIndex), m];
+    console.log(this.currentIndex, this.history.length);
+  }
+
+  public next(): Memento {
+    console.log(this.currentIndex + 1, this.history.length);
+    if (this.currentIndex + 1 >= this.history.length)
+      throw new Error("Next history error");
+    return this.history[++this.currentIndex];
+  }
+
+  public prev(): Memento {
+    console.log(this.currentIndex - 1, this.history.length);
+    if (this.currentIndex - 1 < 0) throw new Error("Prev history error");
+    return this.history[--this.currentIndex];
+  }
+}
+
+class CareTaker {
+  private originator: Originator;
+  private history: History;
+
+  public constructor(originator: Originator) {
     this.originator = originator;
-    this.redoHistory = [];
-    this.undoHistory = [];
+    this.history = new History();
   }
 
-  public makeBackup(state: T): void {
-    this.originator.restore(new Snapshot(state));
-    const m = this.originator.save();
-    this.undoHistory.push(m);
-    this.redoHistory = [];
+  public makeBackup(state: State): void {
+    this.originator.restore(new Memento(state));
+
+    this.history.add(this.originator.save());
   }
 
-  public redo(): T | null {
-    const nextState = this.redoHistory.pop();
-    if (nextState) {
-      const currentState = this.originator.save();
-      this.undoHistory.push(currentState);
-      this.originator.restore(nextState);
-      return nextState.getState();
-    }
-    return null;
+  public redo(): State {
+    const nextMemento = this.history.next();
+    this.originator.restore(nextMemento);
+    return this.originator.save().getState();
   }
 
-  public undo(): T | null {
-    const prevState = this.undoHistory.pop();
-    if (prevState) {
-      const currentState = this.originator.save();
-      this.redoHistory.push(currentState);
-      this.originator.restore(prevState);
-      return prevState.getState();
-    }
-    return null;
+  public undo(): State {
+    const prevMemento = this.history.prev();
+    this.originator.restore(prevMemento);
+    return this.originator.save().getState();
   }
 }
 

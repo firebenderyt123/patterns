@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io";
 
-import { SocketHandler, careTaker } from "./socket.handler";
+import { SocketHandler, careTaker, originator } from "./socket.handler";
 import { logger } from "../patterns/observer";
 import { HistoryEvent } from "../common/enums/history.enums";
 
@@ -13,14 +13,14 @@ export class HistoryHandler extends SocketHandler {
   private redoHistory(): void {
     try {
       // PATTERN: memento
-      const lists = careTaker.redo();
+      const state = careTaker.redo();
 
-      if (!lists) {
-        logger.writeError(`Error calling redo command`);
+      if (!state) {
+        logger.writeWarning(`No redo history`);
         return;
       }
 
-      this.db.setData(lists);
+      this.db.setData(state);
       this.updateLists();
 
       // PATTERN: observer
@@ -33,14 +33,14 @@ export class HistoryHandler extends SocketHandler {
   private undoHistory(): void {
     try {
       // PATTERN: memento
-      const lists = careTaker.undo();
+      const state = careTaker.undo();
 
-      if (!lists) {
-        logger.writeError(`Error calling undo command`);
+      if (!state) {
+        logger.writeWarning(`No undo history`);
         return;
       }
 
-      this.db.setData(lists);
+      this.db.setData(state);
       this.updateLists();
 
       // PATTERN: observer

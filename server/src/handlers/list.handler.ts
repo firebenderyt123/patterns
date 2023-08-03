@@ -15,7 +15,10 @@ export class ListHandler extends SocketHandler {
   }
 
   private getLists(callback: (cards: List[]) => void): void {
-    callback(this.db.getData());
+    const lists = this.db.getData();
+    callback(lists);
+    // PATTERN: memento
+    careTaker.makeBackup(lists);
   }
 
   private reorderLists(sourceIndex: number, destinationIndex: number): void {
@@ -31,7 +34,6 @@ export class ListHandler extends SocketHandler {
 
       // PATTERN: memento
       careTaker.makeBackup(reorderedLists);
-
       // PATTERN: observer
       logger.writeInfo(
         `Lists reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}`
@@ -72,7 +74,6 @@ export class ListHandler extends SocketHandler {
 
       // PATTERN: memento
       careTaker.makeBackup(updatedLists);
-
       // PATTERN: observer
       logger.writeInfo(`List renamed: ${name}`);
     } catch (error) {
@@ -91,7 +92,6 @@ export class ListHandler extends SocketHandler {
 
       // PATTERN: memento
       careTaker.makeBackup(updatedLists);
-
       // PATTERN: observer
       logger.writeInfo(`List deleted: ${listId}`);
     } catch (error) {
