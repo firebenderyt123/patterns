@@ -2,7 +2,7 @@ import type { Socket } from "socket.io";
 
 import { CardEvent } from "../common/enums";
 import { Card } from "../data/models/card";
-import { SocketHandler } from "./socket.handler";
+import { SocketHandler, careTaker } from "./socket.handler";
 import { logger } from "../patterns/observer";
 
 export class CardHandler extends SocketHandler {
@@ -30,6 +30,9 @@ export class CardHandler extends SocketHandler {
       this.db.setData(updatedLists);
       this.updateLists();
 
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
+
       // PATTERN: observer
       logger.writeInfo(`Card created in list ${listId}: ${cardName}`);
     } catch (error) {
@@ -39,7 +42,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  private renameCard(cardId: string, cardName: string) {
+  private renameCard(cardId: string, cardName: string): void {
     try {
       const lists = this.db.getData();
 
@@ -54,6 +57,9 @@ export class CardHandler extends SocketHandler {
       this.db.setData(updatedLists);
       this.updateLists();
 
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
+
       // PATTERN: observer
       logger.writeInfo(`Card name changed ${cardId}: ${cardName}`);
     } catch (error) {
@@ -61,7 +67,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  private changeDescriptionCard(cardId: string, description: string) {
+  private changeDescriptionCard(cardId: string, description: string): void {
     try {
       const lists = this.db.getData();
 
@@ -76,6 +82,9 @@ export class CardHandler extends SocketHandler {
       this.db.setData(updatedLists);
       this.updateLists();
 
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
+
       // PATTERN: observer
       logger.writeInfo(`Card description changed ${cardId}: ${description}`);
     } catch (error) {
@@ -85,7 +94,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  private deleteCard(cardId: string) {
+  private deleteCard(cardId: string): void {
     try {
       const lists = this.db.getData();
 
@@ -96,6 +105,9 @@ export class CardHandler extends SocketHandler {
       this.db.setData(updatedLists);
       this.updateLists();
 
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
+
       // PATTERN: observer
       logger.writeInfo(`Card was deleted: ${cardId}`);
     } catch (error) {
@@ -103,7 +115,7 @@ export class CardHandler extends SocketHandler {
     }
   }
 
-  private dublicateCard(cardId: string) {
+  private dublicateCard(cardId: string): void {
     try {
       const lists = this.db.getData();
 
@@ -123,6 +135,9 @@ export class CardHandler extends SocketHandler {
 
       this.db.setData(updatedLists);
       this.updateLists();
+
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
 
       // PATTERN: observer
       logger.writeInfo(`Card dublicated: ${cardId}`);
@@ -153,6 +168,9 @@ export class CardHandler extends SocketHandler {
       });
       this.db.setData(reordered);
       this.updateLists();
+
+      // PATTERN: memento
+      careTaker.makeBackup(reordered);
 
       // PATTERN: observer
       logger.writeInfo(

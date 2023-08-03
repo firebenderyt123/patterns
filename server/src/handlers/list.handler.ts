@@ -2,7 +2,7 @@ import type { Socket } from "socket.io";
 
 import { ListEvent } from "../common/enums";
 import { List } from "../data/models/list";
-import { SocketHandler } from "./socket.handler";
+import { SocketHandler, careTaker } from "./socket.handler";
 import { logger } from "../patterns/observer";
 
 export class ListHandler extends SocketHandler {
@@ -29,6 +29,9 @@ export class ListHandler extends SocketHandler {
       this.db.setData(reorderedLists);
       this.updateLists();
 
+      // PATTERN: memento
+      careTaker.makeBackup(reorderedLists);
+
       // PATTERN: observer
       logger.writeInfo(
         `Lists reordered: sourceIndex=${sourceIndex}, destinationIndex=${destinationIndex}`
@@ -42,8 +45,12 @@ export class ListHandler extends SocketHandler {
     try {
       const lists = this.db.getData();
       const newList = new List(name);
-      this.db.setData(lists.concat(newList));
+      const newLists = lists.concat(newList);
+      this.db.setData(newLists);
       this.updateLists();
+
+      // PATTERN: memento
+      careTaker.makeBackup(newLists);
 
       // PATTERN: observer
       logger.writeInfo(`List created: ${name}`);
@@ -52,7 +59,7 @@ export class ListHandler extends SocketHandler {
     }
   }
 
-  private renameList(listId: string, name: string) {
+  private renameList(listId: string, name: string): void {
     try {
       const lists = this.db.getData();
 
@@ -63,6 +70,9 @@ export class ListHandler extends SocketHandler {
       this.db.setData(updatedLists);
       this.updateLists();
 
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
+
       // PATTERN: observer
       logger.writeInfo(`List renamed: ${name}`);
     } catch (error) {
@@ -70,7 +80,7 @@ export class ListHandler extends SocketHandler {
     }
   }
 
-  private deleteList(listId: string) {
+  private deleteList(listId: string): void {
     try {
       const lists = this.db.getData();
 
@@ -78,6 +88,9 @@ export class ListHandler extends SocketHandler {
 
       this.db.setData(updatedLists);
       this.updateLists();
+
+      // PATTERN: memento
+      careTaker.makeBackup(updatedLists);
 
       // PATTERN: observer
       logger.writeInfo(`List deleted: ${listId}`);

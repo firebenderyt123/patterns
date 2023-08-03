@@ -77,7 +77,7 @@ class LogFileSubscriber extends LogConsoleSubscriber {
     this.createPath(filePath);
   }
 
-  createPath(filePath: string) {
+  createPath(filePath: string): void {
     try {
       const folderPath = dirname(filePath);
       mkdirSync(folderPath, { recursive: true });
