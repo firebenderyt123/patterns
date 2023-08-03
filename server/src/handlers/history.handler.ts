@@ -1,6 +1,6 @@
 import type { Socket } from "socket.io";
 
-import { SocketHandler, careTaker, originator } from "./socket.handler";
+import { SocketHandler, careTaker } from "./socket.handler";
 import { logger } from "../patterns/observer";
 import { HistoryEvent } from "../common/enums/history.enums";
 
